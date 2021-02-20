@@ -1,0 +1,102 @@
+<hr><hr>
+<div style="text-align: center;">
+  <H2>Cidades</H2>
+</div>
+<hr><hr>
+ <div class="row">
+    <!--1ª Coluna-->
+    <div class="form-group col-md-5">
+     <!--Inicio-->
+     <H4>Consultas</H4>
+     <hr>
+
+     <div [formGroup]="formularioConsulta">
+
+        <div>
+          <label>Nome da cidade</label><br>
+          <div class="input-group">
+              <input class="form-control" type="text" formControlName="nome" maxlength="45" />
+          </div>
+        </div>
+        <br>
+
+        <div>
+          <label>Nome do estado</label><br>
+          <div class="input-group">
+              <input class="form-control" type="text" formControlName="estado" maxlength="45" />
+          </div>
+        </div>
+
+        <br>
+        <div class="col-md-7">
+          <button (click)="consultar()" type="submit" class="btn btn-primary"
+          [disabled]="!formularioConsulta.get('nome').value && !formularioConsulta.get('estado').value">Consultar</button>
+          &nbsp;
+          <button (click)="limparFormularioConsulta()" type="submit" class="btn btn-danger">Limpar</button>
+        </div>
+
+        <br>
+        <div class="main" *ngIf="cidades">
+          <table class="table table-sm table-striped table-cordered table-hover tablefocus" role="grid"
+             aria-labelledby="cidade" summary="Lista de cidades">
+                 <thead>
+                     <tr class="thead-light">
+                         <th class="text-center" scope="col" title="nome">Nome</th>
+                         <th class="text-center" scope="col" title="estado">Estado</th>
+                     </tr>
+                 </thead>
+                 <tbody *ngIf="cidades.length && cidades.length > 0">
+                     <tr scope="row" *ngFor="let c of cidades">
+                         <td class="text-center">{{c.nome}}</td>
+                         <td class="text-center">{{c.estado}}</td>
+                     </tr>
+                 </tbody>
+                 <tbody *ngIf="!cidades.length || cidades.length==0">
+                     <tr scope="row">
+                         <td colspan="2">Nenhuma cidade!</td>
+                     </tr>
+                 </tbody>
+             </table>
+        </div>
+
+     </div>
+
+     </div>
+    <!-- Fim-->
+
+    <!--2ª Coluna-->
+    <div class="form-group col-md-5">
+      <H4>Cadastramento</H4>
+      <hr>
+
+      <div [formGroup]="formularioInclusao">
+
+        <div>
+          <label>Nome da cidade</label><br>
+          <div class="input-group">
+              <input class="form-control" type="text" formControlName="nome" maxlength="45" />
+          </div>
+        </div>
+        <br>
+
+        <div>
+          <label>Nome do estado</label><br>
+          <div class="input-group">
+              <input class="form-control" type="text" formControlName="estado" maxlength="45" />
+          </div>
+        </div>
+        <br>
+
+        <div>
+          <button (click)="salvar()" type="submit" class="btn btn-primary"
+          [disabled]="!formularioInclusao.valid">Salvar</button>
+        </div>
+
+      </div>
+
+    </div>
+
+ </div>
+
+
+

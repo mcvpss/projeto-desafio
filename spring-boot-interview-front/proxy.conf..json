@@ -1,0 +1,21 @@
+
+const proxy = [
+{
+	context: ‘/api’,
+	target: ‘http://localhost:5000’,
+	pathRewrite: { ‘^/api’: ” }
+}
+];
+module.exports = proxy;
+
+
+"/rest":{
+	"target":{
+		"host": "10.0.75.1",
+		"protocol": "http",
+		"port": 5000
+	},
+	"secure": false,
+	"changeOrigin": false,
+	"logLevel": "info"
+}

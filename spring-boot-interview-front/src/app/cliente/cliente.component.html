@@ -1,0 +1,192 @@
+<br><br>
+<hr><hr>
+<div style="text-align: center;">
+  <H2>Clientes</H2>
+</div>
+<hr><hr>
+ <div class="row">
+    <!--1ª Coluna-->
+    <div class="form-group col-md-6">
+     <!--Inicio-->
+     <H4>Consultas</H4>
+     <hr>
+
+     <div [formGroup]="formularioConsulta">
+
+      <div>
+        <label>Id do cliente</label><br>
+        <div class="input-group">
+            <input class="form-control" type="text" formControlName="id" maxlength="15"/>
+        </div>
+      </div>
+      <br>
+
+        <div>
+          <label>Nome do cliente</label><br>
+          <div class="input-group">
+              <input class="form-control" type="text" formControlName="nome" maxlength="45" />
+          </div>
+        </div>
+        <br>
+
+        <div class="col-md-7">
+          <button (click)="consultar()" type="submit" class="btn btn-primary"
+          [disabled]="!formularioConsulta.get('id').value && !formularioConsulta.get('nome').value">Consultar</button>
+          &nbsp;
+          <button (click)="limparFormularioConsulta()" type="submit" class="btn btn-danger">Limpar</button>
+        </div>
+
+        <br>
+
+        <div class="main" *ngIf="clientes">
+          <table class="table table-sm table-striped table-cordered table-hover tablefocus" role="grid"
+             aria-labelledby="cliente" summary="Lista de clientes">
+                 <thead>
+                     <tr class="thead-light">
+                         <th class="text-center" scope="col" title="id">Id</th>
+                         <th class="text-center" scope="col" title="nome">Nome</th>
+                         <th class="text-center" scope="col" title="sexo">Sexo</th>
+                         <th class="text-center" scope="col" title="dataNascimento">Data de nascimento</th>
+                         <th class="text-center" scope="col" title="idade">Idade</th>
+                         <th class="text-center" scope="col" title="cidade">Cidade</th>
+                         <th class="text-center" scope="col" title="acoes">Ações</th>
+                     </tr>
+                 </thead>
+                 <tbody *ngIf="clientes.length && clientes.length > 0">
+                     <tr scope="row" *ngFor="let c of clientes">
+                         <td class="text-center">{{c.id}}</td>
+                         <td class="text-center">{{c.nome}}</td>
+                         <td class="text-center">{{c.sexo}}</td>
+                         <td class="text-center">{{c.dataNascimento}}</td>
+                         <td class="text-center">{{c.idade}}</td>
+                         <td class="text-center">{{c.cidade}}</td>
+                         <td class="text-center">
+                            <span >
+                              <button (click)="confirmacao(edicao, c)" type="submit" class="btn btn-link"><i class="fa fa-navicon"> Editar</i></button>
+                            </span>
+                            &nbsp;
+                            <span >
+                              <button (click)="confirmacao(exclusao, c)" type="submit" class="btn btn-link"><i class="fa fa-navicon"> Excluir</i></button>
+                            </span>
+                         </td>
+                     </tr>
+                 </tbody>
+                 <tbody *ngIf="!clientes.length || clientes.length==0">
+                     <tr scope="row">
+                         <td colspan="6">Nenhum cliente!</td>
+                     </tr>
+                 </tbody>
+             </table>
+        </div>
+
+     </div>
+
+     </div>
+    <!-- Fim-->
+
+    <!--2ª Coluna-->
+    <div class="form-group col-md-5">
+      <H4>Cadastramento</H4>
+      <hr>
+
+      <div [formGroup]="formularioInclusao">
+
+        <div class="form-group">
+          <label>Nome completo do cliente</label><br>
+          <div class="input-group">
+              <input class="form-control" type="text" formControlName="nome" maxlength="45" />
+          </div>
+        </div>
+        <br>
+
+        <div class="form-group">
+          <label for="sexo">Sexo</label><br>
+          <select #selectSexo (change)="selecionarSexo($event)" class="form-control" id="sexo"
+            formControlName="sexo">
+            <option value="M">Masculino</option>
+            <option value="F">Feminino</option>
+            <option value="O">Outro</option>
+          </select>
+        </div>
+        <br>
+
+        <div class="form-group">
+          <label>Data nascimento</label><br>
+          <div class="input-group">
+              <input #dataNascimentoInput (keyup)="formatarData(dataNascimentoInput)" class="form-control"
+              placeholder="dd/mm/aaaa" type="text" autocomplete="off"
+              formControlName="dataNascimento" (ngModelChange)="changeDataNascimento()"/>
+          </div>
+        </div>
+        <br>
+
+        <div class="form-group">
+          <label>Cidade</label><br>
+          <select #selectCidade (change)="selecionarCidade($event)" class="form-control" id="cidadeId"
+            formControlName="cidadeId">
+            <option *ngFor="let c of cidades" [ngValue]="c.id" >
+              {{c.nome}}
+            </option>
+          </select>
+        </div>
+        <br>
+
+        <div>
+          <button (click)="salvar()" type="submit" class="btn btn-primary"
+          [disabled]="!formularioInclusao.valid">Salvar</button>
+        </div>
+
+      </div>
+    </div>
+
+ </div>
+ <hr>
+
+  <!-- Template Edição -->
+  <ng-template #edicao>
+    <div class="modal-header">
+      <h4 class="modal-title">Alterar nome do cliente ?</h4>
+      <button type="button" class="close" aria-label="Close" (click)="fechar()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form [formGroup]="formularioEdicao">
+        <div class="row">
+          <div class="form-group col-sm-9">
+            <label>Novo nome do cliente</label><br>
+            <input class="form-control" type="text" formControlName="nome" maxlength="45" [ngModelOptions]="{standalone: true}" />
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primaryblack" (click)="[fechar(),editar()]" [disabled]="!formularioEdicao.valid">Sim</button>
+      <button type="button" class="btn btn-danger" (click)="fechar()">Não</button>
+    </div>
+  </ng-template>
+
+ <!-- Template Exclusão -->
+ <ng-template #exclusao>
+  <div class="modal-header">
+    <h4 class="modal-title">Exclusão</h4>
+    <button type="button" class="close" aria-label="Close" (click)="fechar()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <p>Tem certeza que deseja excluir o cliente?</p>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primaryblack" (click)="[fechar(),excluir()]">Sim</button>
+    <button type="button" class="btn btn-danger" (click)="fechar()">Não</button>
+  </div>
+</ng-template>
+
+
+
+
